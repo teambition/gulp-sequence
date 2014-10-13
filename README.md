@@ -1,4 +1,4 @@
-gulp-sequence v0.1.0 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
+gulp-sequence v0.1.1 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
 ====
 > Run a series of gulp tasks in order.
 

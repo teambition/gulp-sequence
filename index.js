@@ -8,21 +8,19 @@
  */
 
 var gulp = require('gulp');
-var Thunk = require('thunks')(function (error) {
-      console.log('error', error);
-      return true;
-    });
+var Thunk = require('thunks')();
 var gutil = require('gulp-util');
 var packageName = require('./package.json').name;
 
 module.exports = function () {
+  var BREAKER = {};
   var args = Array.prototype.slice.call(arguments);
   var callback = args[args.length - 1];
 
   if (typeof callback === 'function') args.pop();
   else callback = null;
 
-  if (!args.length) throw new gutil.PluginError(packageName, 'Empty task!');
+  if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!');
 
   function genTask(task) {
     if (!Array.isArray(task)) task = [task];
@@ -32,9 +30,9 @@ module.exports = function () {
         function successListener(e) {
           var index = task.indexOf(e.task);
           if (index < 0) return;
-          task[index] = true;
+          task[index] = BREAKER;
           for (var i = 0; i < task.length; i++) {
-            if (task[i] !== true) return;
+            if (task[i] !== BREAKER) return;
           }
           removeListener();
           cb();
