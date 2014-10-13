@@ -15,10 +15,10 @@ var packageName = require('./package.json').name;
 module.exports = function () {
   var BREAKER = {};
   var args = Array.prototype.slice.call(arguments);
-  var callback = args[args.length - 1];
+  var done = args[args.length - 1];
 
-  if (typeof callback === 'function') args.pop();
-  else callback = null;
+  if (typeof done === 'function') args.pop();
+  else done = null;
 
   if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!');
 
@@ -26,7 +26,7 @@ module.exports = function () {
     if (!Array.isArray(task)) task = [task];
     return function (error) {
       if (error) return Thunk.digest(error);
-      return Thunk(function (cb) {
+      return Thunk(function (callback) {
         function successListener(e) {
           var index = task.indexOf(e.task);
           if (index < 0) return;
@@ -35,13 +35,13 @@ module.exports = function () {
             if (task[i] !== BREAKER) return;
           }
           removeListener();
-          cb();
+          callback();
         }
 
         function errorListener(e) {
           if (!e.err || task.indexOf(e.task) < 0) return;
           removeListener();
-          cb(e.err);
+          callback(e.err);
         }
 
         function removeListener() {
@@ -61,12 +61,12 @@ module.exports = function () {
     };
   }
 
-  function runSequence(cb) {
+  function runSequence(callback) {
     var thunk = Thunk();
     for (var i = 0; i < args.length; i++) thunk = thunk(genTask(args[i]));
-    return thunk(cb);
+    return thunk(callback);
   }
 
-  if (callback) return runSequence(callback);
+  if (done) return runSequence(done);
   return runSequence;
 };

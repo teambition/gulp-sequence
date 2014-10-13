@@ -41,16 +41,20 @@ module.exports = function () {
     }, 800);
   });
 
-  gulp.task('sequence-1', gulpSequence(['a', 'b'], 'c', ['d', 'e']));
+  gulp.task('f', function () {
+    return gulp.src('*.js');
+  });
+
+  gulp.task('sequence-1', gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f'));
 
   gulp.task('sequence-2', function (cb) {
-    gulpSequence(['a', 'b'], 'c', ['d', 'e'], cb);
+    gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f', cb);
   });
 
   gulp.task('sequence-3', function (cb) {
-    gulpSequence(['a', 'b'], 'c', ['d', 'e'])(cb);
+    gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f')(cb);
   });
 
-  gulp.task('gulp-sequence', gulpSequence('sequence-1', 'sequence-2', 'sequence-3'));
+  gulp.task('test', gulpSequence('sequence-1', 'sequence-2', 'sequence-3'));
 
 };

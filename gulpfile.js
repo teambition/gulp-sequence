@@ -6,13 +6,11 @@ var gulp = require('gulp'),
   test = require('./test/index');
 
 gulp.task('jshint', function () {
-  return gulp.src(['index.js', 'gulpfile.js', 'test/index.js'])
+  return gulp.src(['*.js', 'test/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 test();
-
-gulp.task('test', ['gulp-sequence']);
 
 gulp.task('default', gulpSequence('jshint', 'test'));
