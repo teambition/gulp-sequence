@@ -12,7 +12,9 @@ var Thunk = require('thunks')();
 var gutil = require('gulp-util');
 var packageName = require('./package.json').name;
 
-module.exports = function () {
+module.exports = gulpSequence;
+
+function gulpSequence() {
   var BREAKER = {};
   var args = Array.prototype.slice.call(arguments);
   var done = args[args.length - 1];
@@ -69,4 +71,9 @@ module.exports = function () {
 
   if (done) return runSequence(done);
   return runSequence;
+}
+
+gulpSequence.use = function (availableGulp) {
+  gulp = availableGulp;
+  return gulpSequence;
 };

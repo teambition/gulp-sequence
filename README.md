@@ -1,4 +1,4 @@
-gulp-sequence v0.1.2 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
+gulp-sequence v0.2.0 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
 ====
 > Run a series of gulp tasks in order.
 
@@ -69,7 +69,10 @@ var gulpSequence = require('gulp-sequence');
 ```
 
 ### gulpSequence('subtask1', 'subtask2',...[, callback])
-return [thunk](https://github.com/teambition/thunks)
+return [thunk](https://github.com/teambition/thunks) function.
+
+### gulpSequence.use(gulp)
+return gulpSequence. Use the effective gulp.
 
 ## License
 
