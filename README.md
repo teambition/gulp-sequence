@@ -1,4 +1,4 @@
-gulp-sequence v0.2.0 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
+gulp-sequence v0.2.1 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
 ====
 > Run a series of gulp tasks in order.
 
@@ -69,10 +69,24 @@ var gulpSequence = require('gulp-sequence');
 ```
 
 ### gulpSequence('subtask1', 'subtask2',...[, callback])
-return [thunk](https://github.com/teambition/thunks) function.
+return a [thunk](https://github.com/teambition/thunks) function.
+
+```js
+var gulp = require('gulp'),
+  gulpSequence = require('gulp-sequence');
+
+gulp.task('test', gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f'));
+```
 
 ### gulpSequence.use(gulp)
-return gulpSequence. Use the effective gulp.
+return a new gulpSequence function with the gulp. If you have some errors such as "task xxx is not defined", this will resolve it.
+
+```js
+var gulp = require('gulp'),
+  gulpSequence = require('gulp-sequence').use(gulp);
+
+gulp.task('test', gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f'));
+```
 
 ## License
 

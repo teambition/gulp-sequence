@@ -6,8 +6,6 @@ var gulp = require('gulp'),
 
 module.exports = function () {
 
-  gulpSequence.use(gulp);
-
   gulp.task('a', function (cb) {
     setTimeout(function () {
       console.log('a');
