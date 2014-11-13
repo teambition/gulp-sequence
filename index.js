@@ -25,50 +25,42 @@ function sequence(gulp) {
 
     if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!');
 
-    function genTask(task) {
-      if (!Array.isArray(task)) task = [task];
-      return function (error) {
-        if (error) return Thunk.digest(error);
-        return Thunk(function (callback) {
-          function successListener(e) {
-            var index = task.indexOf(e.task);
-            if (index < 0) return;
-            task[index] = BREAKER;
-            for (var i = 0; i < task.length; i++) {
-              if (task[i] !== BREAKER) return;
-            }
-            removeListener();
-            callback();
-          }
+    var runSequence = Thunk.seq.apply(null, args.map(function (task) {
+      return function (callback) {
+        if (!Array.isArray(task)) task = [task];
 
-          function errorListener(e) {
-            if (!e.err || task.indexOf(e.task) < 0) return;
-            removeListener();
-            callback(e.err);
+        function successListener(e) {
+          var index = task.indexOf(e.task);
+          if (index < 0) return;
+          task[index] = BREAKER;
+          for (var i = 0; i < task.length; i++) {
+            if (task[i] !== BREAKER) return;
           }
+          removeListener();
+          callback();
+        }
 
-          function removeListener() {
-            gulp.removeListener('task_stop', successListener)
-              .removeListener('task_not_found', errorListener)
-              .removeListener('task_recursion', errorListener)
-              .removeListener('task_err', errorListener);
-          }
+        function errorListener(e) {
+          if (!e.err || task.indexOf(e.task) < 0) return;
+          removeListener();
+          callback(e.err);
+        }
 
-          gulp
-            .on('task_stop', successListener)
-            .on('task_not_found', errorListener)
-            .on('task_recursion', errorListener)
-            .on('task_err', errorListener)
-            .start(task.slice());
-        });
+        function removeListener() {
+          gulp.removeListener('task_stop', successListener)
+            .removeListener('task_not_found', errorListener)
+            .removeListener('task_recursion', errorListener)
+            .removeListener('task_err', errorListener);
+        }
+
+        gulp
+          .on('task_stop', successListener)
+          .on('task_not_found', errorListener)
+          .on('task_recursion', errorListener)
+          .on('task_err', errorListener)
+          .start(task.slice());
       };
-    }
-
-    function runSequence(callback) {
-      var thunk = Thunk();
-      for (var i = 0; i < args.length; i++) thunk = thunk(genTask(args[i]));
-      return thunk(callback);
-    }
+    }));
 
     return done ? runSequence(done) : runSequence;
   }
