@@ -12,12 +12,14 @@ var Thunk = require('thunks')();
 var gutil = require('gulp-util');
 var packageName = require('./package.json').name;
 
+var slice = Array.prototype.slice;
+
 module.exports = sequence(currentGulp);
 
 function sequence(gulp) {
   function gulpSequence() {
     var BREAKER = {};
-    var args = Array.prototype.slice.call(arguments);
+    var args = slice.call(arguments);
     var done = args[args.length - 1];
 
     if (typeof done === 'function') args.pop();
@@ -25,7 +27,7 @@ function sequence(gulp) {
 
     if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!');
 
-    var runSequence = Thunk.seq.apply(null, args.map(function (task) {
+    var runSequence = Thunk.seq(args.map(function (task) {
       return function (callback) {
         if (!Array.isArray(task)) task = [task];
 
