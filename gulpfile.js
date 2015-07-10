@@ -1,16 +1,9 @@
-'use strict';
+'use strict'
 
-var gulp = require('gulp'),
-  jshint = require('gulp-jshint'),
-  gulpSequence = require('./index'),
-  test = require('./test/index');
+var gulp = require('gulp')
+var gulpSequence = require('./index')
+var test = require('./test/index')
 
-gulp.task('jshint', function () {
-  return gulp.src(['*.js', 'test/*.js'])
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
-});
+test()
 
-test();
-
-gulp.task('default', gulpSequence('jshint', 'test'));
+gulp.task('default', gulpSequence('test'))

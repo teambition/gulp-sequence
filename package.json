@@ -4,7 +4,7 @@
   "authors": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "0.3.2",
+  "version": "0.4.0",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -20,12 +20,12 @@
     "flow"
   ],
   "dependencies": {
-    "gulp": "^3.8.0",
-    "gulp-util": "^3.0.0",
-    "thunks": "^2.7.2"
+    "gulp-util": ">=2.0.0",
+    "thunks": "^3.4.3"
   },
   "devDependencies": {
-    "gulp-jshint": "^1.8.4"
+    "gulp": "^3.9.0",
+    "standard": "^4.5.2"
   },
   "scripts": {
     "test": "gulp test"

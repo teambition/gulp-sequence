@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 /*
  * gulp-sequence
  * https://github.com/teambition/gulp-sequence
@@ -7,52 +7,51 @@
  * Licensed under the MIT license.
  */
 
-var currentGulp = require('gulp');
-var Thunk = require('thunks')();
-var gutil = require('gulp-util');
-var packageName = require('./package.json').name;
+var currentGulp = require('gulp')
+var thunk = require('thunks')()
+var gutil = require('gulp-util')
+var packageName = require('./package.json').name
+var slice = Array.prototype.slice
 
-var slice = Array.prototype.slice;
+module.exports = sequence(currentGulp)
 
-module.exports = sequence(currentGulp);
+function sequence (gulp) {
+  function gulpSequence () {
+    var BREAKER = {}
+    var args = slice.call(arguments)
+    var done = args[args.length - 1]
 
-function sequence(gulp) {
-  function gulpSequence() {
-    var BREAKER = {};
-    var args = slice.call(arguments);
-    var done = args[args.length - 1];
+    if (typeof done === 'function') args.pop()
+    else done = null
 
-    if (typeof done === 'function') args.pop();
-    else done = null;
+    if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!')
 
-    if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!');
-
-    var runSequence = Thunk.seq(args.map(function (task) {
+    var runSequence = thunk.seq(args.map(function (task) {
       return function (callback) {
-        if (!Array.isArray(task)) task = [task];
+        if (!Array.isArray(task)) task = [task]
 
-        function successListener(e) {
-          var index = task.indexOf(e.task);
-          if (index < 0) return;
-          task[index] = BREAKER;
+        function successListener (e) {
+          var index = task.indexOf(e.task)
+          if (index < 0) return
+          task[index] = BREAKER
           for (var i = 0; i < task.length; i++) {
-            if (task[i] !== BREAKER) return;
+            if (task[i] !== BREAKER) return
           }
-          removeListener();
-          callback();
+          removeListener()
+          callback()
         }
 
-        function errorListener(e) {
-          if (!e.err || task.indexOf(e.task) < 0) return;
-          removeListener();
-          callback(e.err);
+        function errorListener (e) {
+          if (!e.err || task.indexOf(e.task) < 0) return
+          removeListener()
+          callback(e.err)
         }
 
-        function removeListener() {
+        function removeListener () {
           gulp.removeListener('task_stop', successListener)
             .removeListener('task_not_found', errorListener)
             .removeListener('task_recursion', errorListener)
-            .removeListener('task_err', errorListener);
+            .removeListener('task_err', errorListener)
         }
 
         gulp
@@ -60,16 +59,16 @@ function sequence(gulp) {
           .on('task_not_found', errorListener)
           .on('task_recursion', errorListener)
           .on('task_err', errorListener)
-          .start(task.slice());
-      };
-    }));
+          .start(task.slice())
+      }
+    }))
 
-    return done ? runSequence(done) : runSequence;
+    return done ? runSequence(done) : runSequence
   }
 
   gulpSequence.use = function (gulp) {
-    return sequence(gulp);
-  };
+    return sequence(gulp)
+  }
 
-  return gulpSequence;
+  return gulpSequence
 }
