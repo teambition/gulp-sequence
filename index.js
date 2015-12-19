@@ -7,7 +7,7 @@
  * Licensed under the MIT license.
  */
 
-var currentGulp = require.main.require('gulp')
+var currentGulp = (require.main && require.main.require('gulp')) || require('gulp')
 var thunk = require('thunks')()
 var gutil = require('gulp-util')
 var packageName = require('./package.json').name

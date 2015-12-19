@@ -1,6 +1,9 @@
-gulp-sequence v0.3.1 [![Build Status](https://travis-ci.org/teambition/gulp-sequence.svg)](https://travis-ci.org/teambition/gulp-sequence)
+gulp-sequence
 ====
-> Run a series of gulp tasks in order.
+Run a series of gulp tasks in order.
+
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
 
 ## Install
 
@@ -91,3 +94,9 @@ gulp.task('test', gulpSequence(['a', 'b'], 'c', ['d', 'e'], 'f'));
 ## License
 
 MIT © [Teambition](http://teambition.com)
+
+[npm-url]: https://npmjs.org/package/gulp-sequence
+[npm-image]: http://img.shields.io/npm/v/gulp-sequence.svg
+
+[travis-url]: https://travis-ci.org/teambition/gulp-sequence
+[travis-image]: http://img.shields.io/travis/teambition/gulp-sequence.svg
