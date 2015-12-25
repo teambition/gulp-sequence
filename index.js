@@ -7,16 +7,17 @@
  * Licensed under the MIT license.
  */
 
-var currentGulp = require('gulp')
 var thunk = require('thunks')()
 var gutil = require('gulp-util')
 var packageName = require('./package.json').name
 var slice = Array.prototype.slice
 
-module.exports = sequence(currentGulp)
+module.exports = sequence()
 
 function sequence (gulp) {
   function gulpSequence () {
+    if (!gulp) gulp = require('gulp')
+    
     var BREAKER = {}
     var args = slice.call(arguments)
     var done = args[args.length - 1]
