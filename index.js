@@ -17,7 +17,7 @@ module.exports = sequence()
 function sequence (gulp) {
   function gulpSequence () {
     if (!gulp) gulp = require('gulp')
-    
+
     var BREAKER = {}
     var args = slice.call(arguments)
     var done = args[args.length - 1]
@@ -27,7 +27,9 @@ function sequence (gulp) {
 
     if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!')
 
-    var runSequence = thunk.seq(args.map(function (task) {
+    var runSequence = thunk.seq(args.filter(function(taskName) {
+      return taskName;
+    }).map(function (task) {
       return function (callback) {
         if (!Array.isArray(task)) task = [task]
 
