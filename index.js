@@ -25,7 +25,9 @@ function sequence (gulp) {
     if (typeof done === 'function') args.pop()
     else done = null
 
-    if (!args.length) throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!')
+    if (!args.length) {
+      throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!')
+    }
 
     var runSequence = thunk.seq(args.filter(function (taskName) {
       // filter falsely taskName
