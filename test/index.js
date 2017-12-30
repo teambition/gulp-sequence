@@ -1,8 +1,8 @@
 'use strict'
 /* global */
 
-var gulp = require('gulp')
-var gulpSequence = require('../index')
+const gulp = require('gulp')
+const gulpSequence = require('../index')
 
 module.exports = function () {
   gulp.task('a', function (cb) {

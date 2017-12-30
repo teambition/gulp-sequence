@@ -1,8 +1,8 @@
 'use strict'
 
-var gulp = require('gulp')
-var gulpSequence = require('./index')
-var test = require('./test/index')
+const gulp = require('gulp')
+const gulpSequence = require('./index')
+const test = require('./test/index')
 
 test()
 

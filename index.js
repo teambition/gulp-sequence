@@ -7,10 +7,8 @@
  * Licensed under the MIT license.
  */
 
-var thunk = require('thunks')()
-var gutil = require('gulp-util')
-var packageName = require('./package.json').name
-var slice = Array.prototype.slice
+const thunk = require('thunks').thunk
+const slice = Array.prototype.slice
 
 module.exports = sequence()
 
@@ -18,18 +16,18 @@ function sequence (gulp) {
   function gulpSequence () {
     if (!gulp) gulp = require('gulp')
 
-    var BREAKER = {}
-    var args = slice.call(arguments)
+    const BREAKER = {}
+    const args = slice.call(arguments)
     var done = args[args.length - 1]
 
     if (typeof done === 'function') args.pop()
     else done = null
 
     if (!args.length) {
-      throw new gutil.PluginError(packageName, 'No tasks were provided to gulp-sequence!')
+      throw new Error('No tasks were provided to gulp-sequence!')
     }
 
-    var runSequence = thunk.seq(args.filter(function (taskName) {
+    const runSequence = thunk.seq(args.filter(function (taskName) {
       // filter falsely taskName
       return taskName
     }).map(function (task) {
@@ -37,10 +35,10 @@ function sequence (gulp) {
         if (!Array.isArray(task)) task = [task]
 
         function successListener (e) {
-          var index = task.indexOf(e.task)
+          let index = task.indexOf(e.task)
           if (index < 0) return
           task[index] = BREAKER
-          for (var i = 0; i < task.length; i++) {
+          for (let i = 0; i < task.length; i++) {
             if (task[i] !== BREAKER) return
           }
           removeListener()
